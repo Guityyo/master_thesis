@@ -13,7 +13,9 @@ complexity. The results are promising for this new algorithm that combines both 
 problem. A further line of research could be followed combining the Characteristic Boundary Points with different types of
 Kernel as well as with other classification algorithms.
 
+Packages:
+- cvx : to run the code the convex optimization package is needed
 
 To run:
-- mainBATCH  : to run the new methodology SVM-CBP in batch fashion, obtaining results for SVM-CBP and SVMs 
-- mainONLINE : to run the new methodology SVM-CBP in online fashion, obtaining results for SVM-CBP and SVMs  
+- mainBATCH  : runs the new methodology SVM-CBP in batch fashion, obtaining results for SVM-CBP and SVMs 
+- mainONLINE : runs the new methodology SVM-CBP in online fashion, obtaining results for SVM-CBP and SVMs  
