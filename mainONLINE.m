@@ -1,0 +1,271 @@
+
+clear all
+close all
+clc
+warning off
+
+addpath('SVM');
+addpath('SVM-CBP');
+addpath('BaseOGE');
+addpath('cvx');
+addpath('datasets')
+%cvx_setup
+
+%% Initialization
+
+% Preliminar parameters
+num_folders=5;
+num_iterations=20000;
+
+% Parameters to set 
+lamb=[0.001,0.01,0.1,1];
+sigm=[0.01,0.1,0.25,0.5,1];
+
+% Datasets names
+dataset={'Fertility','SPECTFHeart','Ionosphere','WhoSaCus','LiverDisorders','StatlogHeart','Pima','AustralianCreditApproval','BankAu','QSARbio'}; % real datasets 
+num_datasets=length(dataset);
+
+% Print process
+fprintf('process:   0.00%%\n');
+TotalElements=num_folders*length(lamb)+num_folders*length(lamb)*length(sigm); 
+process = 0;
+
+for f=1:num_datasets  %% For each dataset
+    
+% Loading the data
+name=dataset{f};
+datt = xlsread(name);
+
+fprintf('\n\t-----------------------------------------------------------\n');
+fprintf('\n\t\t DATASET    %s\n', name );
+fprintf('\n\t-----------------------------------------------------------\n');
+
+%% UNCOMMENT FOR CREATING THE DATA FOLDS
+labels=datt(:,size(datt,2));
+data=datt(:,1:size(datt,2)-1);
+labels(labels==0)=-1;
+
+% Normalize the data
+data=normalizeData(data');
+
+% Split cv and test  (20% test 80% cv)
+[fil,col]=size(data);
+del=round(col*80/100);
+ind_ran=randperm(col,col);       
+
+x_test=data(:,ind_ran(del+1:col));
+y_test=labels(ind_ran(del+1:col));
+data=data(:,ind_ran(1:del));
+labels=labels(ind_ran(1:del));
+
+
+%% Getting the CBP
+txt=sprintf('\n');
+disp(txt);
+
+lambdaOGE=0.01;  % of the OGE
+[N,x_CBP,beta,gthr,gthr2]=train_OGE_sparse(data,labels,lambdaOGE,'tikhonov');
+
+%% Split folders
+[rows,colms]=size(data);
+[train_ind,test_ind]= K_fold_creation_online(colms,num_folders); %num instances and folders
+save(strcat('datasets_split/data_',name));
+% comment until here if already made the splits
+
+load(strcat('datasets_split/data_',name));
+
+
+%% SVM-CBP TRAINING AND TESTING %%
+z=clock;
+
+txt=sprintf('\n');
+disp(txt);
+
+% To store results
+best_mean_tra=0;
+best_mean_val=0;
+store_mean_acc_tra=zeros(length(lamb), 1);
+store_mean_acc_val=zeros(length(lamb), 1);
+store_total_acc_tra=zeros(num_folders,length(lamb));
+store_total_acc_val=zeros(num_folders,length(lamb));
+  
+for l=1:length(lamb)   % For lambda
+lambda=lamb(l);
+
+store_accuracy_tra=zeros(num_folders, 1);
+store_accuracy_val=zeros(num_folders, 1);
+    
+for n=1:num_folders  % For each folder
+
+% Choose folders %
+x_train=data(:,cell2mat(train_ind(n)));
+y_train=labels(cell2mat(train_ind(n)));
+x_validation=data(:,cell2mat(test_ind(n)));
+y_validation=labels(cell2mat(test_ind(n)));
+
+
+% ONLINE training % 
+[model] = train_onlineCBP_SVM(x_train,y_train,x_CBP,lambda,num_iterations); % Missing x_test,y_test
+[y_train_pred] = test_online_SVM (x_train,model);
+store_accuracy_tra(n)=evaluate_model (y_train,y_train_pred); % evaluate train
+ 
+
+% ONLINE validation %
+[y_validation_pred] = test_online_SVM (x_validation,model);
+store_accuracy_val(n)=evaluate_model (y_validation,y_validation_pred); % evaluate val
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+process=1+process;
+fprintf('\n------------------------------------------------------------------\n');
+progres=strcat('Progress SVM-CBP:\t',num2str(100*process/TotalElements),'%%\n');
+fprintf(progres);
+fprintf('\n------------------------------------------------------------------\n');
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+  
+end  % for folders
+
+  store_mean_acc_tra(l)=mean(store_accuracy_tra);
+  store_mean_acc_val(l)=mean(store_accuracy_val);
+  store_total_acc_tra(:,l)=store_accuracy_tra;
+  store_total_acc_val(:,l)=store_accuracy_val;
+ 
+  % To choose the best folder
+  if(mean(store_accuracy_val)>best_mean_val)
+     best_mean_tra_1=mean(store_accuracy_tra);
+     best_mean_val_1=mean(store_accuracy_val);
+     best_lambda_1=lambda;
+     best_folds_train_1=store_total_acc_tra(:,l);
+     best_folds_val_1=store_total_acc_val(:,l);
+  end
+  
+end % for lambda
+
+
+% ONLINE testing %
+data_x=[x_train x_validation];
+data_y=[y_train;y_validation];
+[model] = train_onlineCBP_SVM(data_x,data_y,x_CBP,best_lambda_1,num_iterations);
+[y_test_pred] = test_online_SVM (x_test,model);
+accuracy_test_1=evaluate_model (y_test,y_test_pred); % evaluate test
+best_sigma_1=model.sigma;
+time_1=etime(clock,z);
+
+%% SVM  TRAINING AND TESTING %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+z=clock;
+
+txt=sprintf('\n');
+disp(txt);
+
+% To store results
+best_mean_tra=0;
+best_mean_val=0;
+store_mean_acc_tra=zeros(length(lamb)+length(sigm), 1);
+store_mean_acc_val=zeros(length(lamb)+length(sigm), 1);
+store_total_acc_tra=zeros(num_folders,length(lamb)+length(sigm));
+store_total_acc_val=zeros(num_folders,length(lamb)+length(sigm));
+  
+num=1;
+
+for l=1:length(lamb)   % For lambda
+lambda=lamb(l);
+
+for s=1:length(sigm)   % For sigma
+sigma=sigm(s);
+
+store_accuracy_tra=zeros(num_folders, 1);
+store_accuracy_val=zeros(num_folders, 1);
+
+
+for n=1:num_folders  % For each folder
+
+% Choose folders %
+x_train=data(:,cell2mat(train_ind(n)));
+y_train=labels(cell2mat(train_ind(n)));
+x_validation=data(:,cell2mat(test_ind(n)));
+y_validation=labels(cell2mat(test_ind(n)));
+
+% ONLINE training % 
+[model] = train_online_SVM(x_train,y_train,sigma,lambda,num_iterations); % Missing x_test,y_test
+[y_train_pred] = test_online_SVM (x_train,model);
+store_accuracy_tra(n)=evaluate_model(y_train,y_train_pred); % evaluate train
+ 
+% ONLINE validation %
+[y_validation_pred] = test_online_SVM (x_validation,model);
+store_accuracy_val(n)=evaluate_model (y_validation,y_validation_pred); % evaluate val
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+process=1+process;
+fprintf('\n------------------------------------------------------------------\n');
+progres=strcat('Progress SVM:\t',num2str(100*process/TotalElements),'%%\n');
+fprintf(progres);
+fprintf('\n------------------------------------------------------------------\n');
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+  
+end % for folders
+
+  store_mean_acc_tra(num)=mean(store_accuracy_tra);
+  store_mean_acc_val(num)=mean(store_accuracy_val);
+  store_total_acc_tra(:,num)=store_accuracy_tra;
+  store_total_acc_val(:,num)=store_accuracy_val;
+
+  % To choose the best folder  
+  if(mean(store_accuracy_val)>best_mean_val)
+     best_mean_tra=mean(store_accuracy_tra);
+     best_mean_val=mean(store_accuracy_val);
+     best_lambda_2=lambda;
+     best_sigma_2=sigma;
+     best_folds_train_2=store_total_acc_tra(:,num);
+     best_folds_val_2=store_total_acc_val(:,num);
+  end
+  num=num+1;
+  
+end % for sigma
+end % for lambda
+
+
+% ONLINE testing %
+data_x=[x_train x_validation];
+data_y=[y_train;y_validation];
+[model] = train_online_SVM(data_x,data_y,best_sigma_2,best_lambda_2,num_iterations);
+[y_test_pred] = test_online_SVM (x_test,model);
+accuracy_test_2=evaluate_model (y_test,y_test_pred); % evaluate test
+
+time_2=etime(clock,z);
+
+% Save the results %
+fileID = fopen(strcat('results_Online/',name,'_results.txt'),'w');
+fprintf(fileID,'\n');
+fprintf(fileID,'\n----------- online SVM with CBP ----------------------------------\n');
+fprintf(fileID,'Results:\n');
+fprintf(fileID,'\tnum iterations          %12.8f\n',num_iterations);
+fprintf(fileID,'\taccuracy (train)        %12.8f\n',best_mean_tra_1);
+fprintf(fileID,'%6.2f \n',best_folds_train_1);
+fprintf(fileID,'\taccuracy (validation)   %12.8f\n',best_mean_val_1);
+fprintf(fileID,'%6.2f \n',best_folds_val_1);
+fprintf(fileID,'\taccuracy (test)         %12.8f\n',accuracy_test_1);
+fprintf(fileID,'\tbest sigma              %12.8f\n',best_sigma_1);
+fprintf(fileID,'\tbest lambda             %12.8f\n',best_lambda_1);
+fprintf(fileID,'\ttotal time              %12.8f\n',time_1);
+fclose(fileID);
+fprintf(fileID,'\n');
+fprintf(fileID,'\n----------- online SVM ----------------------------------\n');
+fprintf(fileID,'Results:\n');
+fprintf(fileID,'\tnum iterations          %12.8f\n',num_iterations);
+fprintf(fileID,'\taccuracy (train)        %12.8f\n',best_mean_tra_2);
+fprintf(fileID,'%6.2f \n',best_folds_train_2);
+fprintf(fileID,'\taccuracy (validation)   %12.8f\n',best_mean_val_2);
+fprintf(fileID,'%6.2f \n',best_folds_val_2);
+fprintf(fileID,'\taccuracy (test)         %12.8f\n',accuracy_test_2);
+fprintf(fileID,'\tbest sigma              %12.8f\n',best_sigma_2);
+fprintf(fileID,'\tbest lambda             %12.8f\n',best_lambda_2);
+fprintf(fileID,'\ttotal time              %12.8f\n',time_2);
+fclose(fileID);
+
+
+end % for datasets

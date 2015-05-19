@@ -1,0 +1,412 @@
+
+----------- SVM + OGE ----------------------------------
+total time 12080.58141900
+lambda   0.10000000
+sigma   0.10000000
+
+-- SVM + OGE ( train  ) --
+mean folds   0.88195322
+  0.87 
+  0.86 
+  0.89 
+  0.90 
+  0.89 
+
+-- SVM + OGE ( validation ) --
+mean folds   0.74534884
+  0.77 
+  0.79 
+  0.67 
+  0.74 
+  0.75 
+
+-- SVM + OGE ( test ) --
+accuracy test   0.74074074
+
+-- store --
+folds train   0.75722543
+folds train   0.67630058
+folds train   0.68208092
+folds train   0.79768786
+folds train   0.75000000
+folds train   0.87283237
+folds train   0.86127168
+folds train   0.89017341
+folds train   0.89595376
+folds train   0.88953488
+folds train   0.91329480
+folds train   0.93063584
+folds train   0.92485549
+folds train   0.93063584
+folds train   0.96511628
+folds train   1.00000000
+folds train   0.99421965
+folds train   1.00000000
+folds train   0.98843931
+folds train   1.00000000
+folds train   1.00000000
+folds train   1.00000000
+folds train   1.00000000
+folds train   1.00000000
+folds train   1.00000000
+folds train   1.00000000
+folds train   1.00000000
+folds train   1.00000000
+folds train   1.00000000
+folds train   1.00000000
+folds val   0.67441860
+folds val   0.72093023
+folds val   0.62790698
+folds val   0.55813953
+folds val   0.59090909
+folds val   0.76744186
+folds val   0.79069767
+folds val   0.67441860
+folds val   0.74418605
+folds val   0.75000000
+folds val   0.67441860
+folds val   0.74418605
+folds val   0.69767442
+folds val   0.65116279
+folds val   0.63636364
+folds val   0.62790698
+folds val   0.65116279
+folds val   0.60465116
+folds val   0.55813953
+folds val   0.61363636
+folds val   0.62790698
+folds val   0.65116279
+folds val   0.60465116
+folds val   0.62790698
+folds val   0.61363636
+folds val   0.62790698
+folds val   0.65116279
+folds val   0.60465116
+folds val   0.62790698
+folds val   0.61363636
+
+-------------- SVM -------------------------------------
+total time 4334.59090200
+sigma   0.05000000
+lambda   0.01000000
+
+-- SVM ( train ) --
+mean folds   0.79514720
+  0.80 
+  0.79 
+  0.78 
+  0.80 
+  0.80 
+
+-- SVM ( validation ) --
+mean folds   0.62505285
+  0.63 
+  0.65 
+  0.60 
+  0.63 
+  0.61 
+
+-- SVM ( test ) --
+accuracy test  0.61111111
+-- store --
+folds train   0.80346821
+folds train   0.79190751
+folds train   0.78034682
+folds train   0.79768786
+folds train   0.80232558
+folds train   0.68786127
+folds train   0.64739884
+folds train   0.66473988
+folds train   0.68208092
+folds train   0.66279070
+folds train   0.62427746
+folds train   0.63005780
+folds train   0.64161850
+folds train   0.65895954
+folds train   0.65697674
+folds train   0.62427746
+folds train   0.63583815
+folds train   0.64161850
+folds train   0.65317919
+folds train   0.66279070
+folds train   0.64161850
+folds train   0.64739884
+folds train   0.65317919
+folds train   0.63583815
+folds train   0.66860465
+folds train   0.80346821
+folds train   0.79190751
+folds train   0.78034682
+folds train   0.79768786
+folds train   0.80232558
+folds train   0.68786127
+folds train   0.65895954
+folds train   0.66473988
+folds train   0.70520231
+folds train   0.67441860
+folds train   0.62427746
+folds train   0.63005780
+folds train   0.64161850
+folds train   0.65895954
+folds train   0.65697674
+folds train   0.62427746
+folds train   0.63583815
+folds train   0.64161850
+folds train   0.65317919
+folds train   0.66279070
+folds train   0.64161850
+folds train   0.64739884
+folds train   0.65317919
+folds train   0.63583815
+folds train   0.66860465
+folds train   0.83236994
+folds train   0.83815029
+folds train   0.83815029
+folds train   0.84393064
+folds train   0.84883721
+folds train   0.72832370
+folds train   0.73988439
+folds train   0.71676301
+folds train   0.72254335
+folds train   0.70348837
+folds train   0.65317919
+folds train   0.65895954
+folds train   0.64739884
+folds train   0.68786127
+folds train   0.68023256
+folds train   0.61849711
+folds train   0.65317919
+folds train   0.64161850
+folds train   0.64739884
+folds train   0.61627907
+folds train   0.65317919
+folds train   0.65895954
+folds train   0.65317919
+folds train   0.64161850
+folds train   0.63953488
+folds train   0.99421965
+folds train   0.98265896
+folds train   0.99421965
+folds train   0.97687861
+folds train   0.98837209
+folds train   0.80346821
+folds train   0.80924855
+folds train   0.79768786
+folds train   0.60115607
+folds train   0.73837209
+folds train   0.66473988
+folds train   0.72832370
+folds train   0.68208092
+folds train   0.75722543
+folds train   0.70930233
+folds train   0.56069364
+folds train   0.67630058
+folds train   0.61849711
+folds train   0.61849711
+folds train   0.73837209
+folds train   0.52601156
+folds train   0.61271676
+folds train   0.55491329
+folds train   0.56069364
+folds train   0.66860465
+folds train   1.00000000
+folds train   1.00000000
+folds train   1.00000000
+folds train   1.00000000
+folds train   1.00000000
+folds train   0.86127168
+folds train   0.88439306
+folds train   0.82080925
+folds train   0.52023121
+folds train   0.61627907
+folds train   0.80924855
+folds train   0.49132948
+folds train   0.55491329
+folds train   0.45664740
+folds train   0.51744186
+folds train   0.68208092
+folds train   0.49710983
+folds train   0.78034682
+folds train   0.45664740
+folds train   0.51162791
+folds train   0.54335260
+folds train   0.72832370
+folds train   0.66473988
+folds train   0.78034682
+folds train   0.51162791
+folds train   1.00000000
+folds train   1.00000000
+folds train   1.00000000
+folds train   1.00000000
+folds train   1.00000000
+folds train   0.53757225
+folds train   0.57803468
+folds train   0.48554913
+folds train   0.46242775
+folds train   0.51744186
+folds train   0.53179191
+folds train   0.84971098
+folds train   0.45664740
+folds train   0.45664740
+folds train   0.84883721
+folds train   0.52601156
+folds train   0.82080925
+folds train   0.45664740
+folds train   0.45664740
+folds train   0.51162791
+folds train   0.52601156
+folds train   0.82080925
+folds train   0.45664740
+folds train   0.45664740
+folds train   0.51162791
+folds val   0.62790698
+folds val   0.65116279
+folds val   0.60465116
+folds val   0.62790698
+folds val   0.61363636
+folds val   0.62790698
+folds val   0.65116279
+folds val   0.60465116
+folds val   0.62790698
+folds val   0.61363636
+folds val   0.62790698
+folds val   0.65116279
+folds val   0.60465116
+folds val   0.62790698
+folds val   0.61363636
+folds val   0.62790698
+folds val   0.65116279
+folds val   0.60465116
+folds val   0.62790698
+folds val   0.61363636
+folds val   0.62790698
+folds val   0.65116279
+folds val   0.60465116
+folds val   0.62790698
+folds val   0.61363636
+folds val   0.62790698
+folds val   0.65116279
+folds val   0.60465116
+folds val   0.62790698
+folds val   0.61363636
+folds val   0.62790698
+folds val   0.65116279
+folds val   0.60465116
+folds val   0.62790698
+folds val   0.61363636
+folds val   0.62790698
+folds val   0.65116279
+folds val   0.60465116
+folds val   0.62790698
+folds val   0.61363636
+folds val   0.62790698
+folds val   0.65116279
+folds val   0.60465116
+folds val   0.62790698
+folds val   0.61363636
+folds val   0.62790698
+folds val   0.65116279
+folds val   0.60465116
+folds val   0.62790698
+folds val   0.61363636
+folds val   0.62790698
+folds val   0.65116279
+folds val   0.60465116
+folds val   0.62790698
+folds val   0.61363636
+folds val   0.62790698
+folds val   0.65116279
+folds val   0.60465116
+folds val   0.62790698
+folds val   0.61363636
+folds val   0.62790698
+folds val   0.65116279
+folds val   0.60465116
+folds val   0.62790698
+folds val   0.61363636
+folds val   0.62790698
+folds val   0.65116279
+folds val   0.60465116
+folds val   0.62790698
+folds val   0.61363636
+folds val   0.62790698
+folds val   0.65116279
+folds val   0.60465116
+folds val   0.62790698
+folds val   0.61363636
+folds val   0.62790698
+folds val   0.65116279
+folds val   0.60465116
+folds val   0.62790698
+folds val   0.61363636
+folds val   0.62790698
+folds val   0.65116279
+folds val   0.60465116
+folds val   0.62790698
+folds val   0.61363636
+folds val   0.62790698
+folds val   0.65116279
+folds val   0.60465116
+folds val   0.62790698
+folds val   0.61363636
+folds val   0.62790698
+folds val   0.65116279
+folds val   0.60465116
+folds val   0.62790698
+folds val   0.61363636
+folds val   0.62790698
+folds val   0.65116279
+folds val   0.60465116
+folds val   0.62790698
+folds val   0.61363636
+folds val   0.62790698
+folds val   0.65116279
+folds val   0.60465116
+folds val   0.62790698
+folds val   0.61363636
+folds val   0.62790698
+folds val   0.65116279
+folds val   0.60465116
+folds val   0.62790698
+folds val   0.61363636
+folds val   0.62790698
+folds val   0.65116279
+folds val   0.60465116
+folds val   0.62790698
+folds val   0.61363636
+folds val   0.62790698
+folds val   0.65116279
+folds val   0.60465116
+folds val   0.62790698
+folds val   0.61363636
+folds val   0.62790698
+folds val   0.65116279
+folds val   0.60465116
+folds val   0.62790698
+folds val   0.61363636
+folds val   0.62790698
+folds val   0.65116279
+folds val   0.60465116
+folds val   0.62790698
+folds val   0.61363636
+folds val   0.62790698
+folds val   0.65116279
+folds val   0.60465116
+folds val   0.62790698
+folds val   0.61363636
+folds val   0.62790698
+folds val   0.65116279
+folds val   0.60465116
+folds val   0.62790698
+folds val   0.61363636
+folds val   0.62790698
+folds val   0.65116279
+folds val   0.60465116
+folds val   0.62790698
+folds val   0.61363636
+folds val   0.62790698
+folds val   0.65116279
+folds val   0.60465116
+folds val   0.62790698
+folds val   0.61363636
+

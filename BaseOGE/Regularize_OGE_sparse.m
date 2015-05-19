@@ -1,0 +1,40 @@
+% This is a beta version of the Optimized Geometry-based Ensemble basic
+% classifier.
+% Copyright 2008, 2009 Oriol Pujol and David Masip. 
+% This software is distributed under the terms of the GNU General Public License
+
+%% Use Tikhonov regularization to optimize the dichotomizers
+%% This function needs the regularization toolbox (http://www2.imm.dtu.dk/~pch/Regutools/)
+
+function [beta,gthr]=Regularize_OGE_sparse(p,N,b,labels,lambda)
+
+f=labels;
+s=sprintf('Preparing optimization. Computing matrix A. This step can take a while. Please wait...');
+disp(s);drawnow;
+beta=ones(1,size(b,2))/size(b,2);
+if size(b,2)>size(p,2)
+    for j=1:size(p,2) 
+        A(j,:)=sign(sum((repmat(p(:,j),1,size(b,2))-b).*N,1));
+    end
+else
+   for j=1:size(b,2) 
+       A(:,j)=sign((p-repmat(b(:,j),1,size(p,2)))'*N(:,j));
+   end
+end
+
+s=sprintf('Optimizing weights...');
+disp(s);
+
+[U,s,V] = csvd(A);
+[x_lambda,rho,eta] = tikhonov(U,s,V,labels,lambda,beta') ;
+beta=x_lambda;
+beta(beta<0)=0;
+
+
+%% Use fast approximation to the threshold.
+acc_marg=0;
+for j=1:size(b,2) % For each hyperplane
+    tmp_marge=(p-repmat(b(:,j),1,size(p,2)))'*N(:,j);
+    acc_marg=acc_marg+beta(j)*((tmp_marge>0)*2-1);
+end
+gthr=(mean(acc_marg(labels==1))+mean(acc_marg(labels==-1)))/2; %

@@ -1,0 +1,21 @@
+
+
+----------- online SVM with CBP ----------------------------------
+Results:
+	num iterations          20000.00000000
+	accuracy (train)         88.60309033
+	accuracy (validation)    64.14044980
+	accuracy (test)          62.32220012
+	best sigma                0.05414549
+	best lambda               0.01000000
+	total time              72035.13851700
+
+----------- online SVM ----------------------------------
+Results:
+	num iterations          20000.00000000
+	accuracy (train)         75.18303990
+	accuracy (validation)    68.08035065
+	accuracy (test)          63.77316812
+	best sigma                0.10000000
+	best lambda               0.01000000
+	total time              236053.4153088
